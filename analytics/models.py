@@ -3,9 +3,6 @@ import hashlib
 from django.conf import settings
 from django.db import models
 from django.utils import timezone
-from django.contrib.auth.models import User
-
-
 # Create your models here.
 
 
@@ -234,7 +231,10 @@ class FileUpload(models.Model):
     ]
 
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    uploaded_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name='file_uploads')
+    uploaded_by = models.ForeignKey(
+        settings.AUTH_USER_MODEL, on_delete=models.SET_NULL,
+        null=True, related_name='file_uploads'
+    )
     original_filename = models.CharField(max_length=255)
     total_size = models.BigIntegerField(help_text="Expected total size in bytes, sent by client at init")
     bytes_received = models.BigIntegerField(default=0)
